@@ -129,6 +129,37 @@ Saída esperada:
 Fatorial of : 5!
 Result: 120
 ```
+---
+
+## ✅ Questão 4 – Soma dos múltiplos de 3 ou 5
+
+> Calcular a soma de todos os múltiplos de 3 ou 5 abaixo de um número informado.
+
+A classe `Question4` fornece:
+- Um método `sumOfMultiplesOf3Or5(long number)` que retorna a soma dos múltiplos
+- Um método `main()` que aceita um argumento para informar o número limite
+
+### 🔍 Testes
+
+```bash
+./mvnw test
+```
+
+Teste incluído:
+- `sumOfMultiplesOf3Or5(10)` → `23` (múltiplos: 3, 5, 6, 9)
+
+### ▶️ Execução manual
+
+```bash
+./mvnw compile exec:java -Dexec.mainClass="com.tinnova.avaliacao.question4.Question4" -Dexec.args="10"
+```
+
+Saída esperada:
+
+```
+Input number: 10
+Sum of multiples of 3 or 5: 23
+```
 
 ---
 

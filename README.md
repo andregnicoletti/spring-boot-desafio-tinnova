@@ -16,8 +16,10 @@ src/
                     ├── AvaliacaoApplication.java
                     ├── question1/
                     │   └── Question1.java
-                    └── question2/
-                        └── Question2.java
+                    ├── question2/
+                    │   └── Question2.java
+                    └── question3/
+                        └── Question3.java
 └── test/
     └── java/
         └── com/
@@ -25,8 +27,10 @@ src/
                 └── avaliacao/
                     ├── question1/
                     │   └── Question1Test.java
-                    └── question2/
-                        └── Question2Test.java
+                    ├── question2/
+                    │   └── Question2Test.java
+                    └── question3/
+                        └── Question3Test.java
 ```
 
 ---
@@ -40,8 +44,6 @@ Ela fornece métodos para cada tipo de voto e também possui um `main` que impri
 
 ### 🔍 Testes
 
-Executar:
-
 ```bash
 ./mvnw test
 ```
@@ -52,7 +54,7 @@ Resultado esperado:
 [INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 ```
 
-### ▶️ Executar com `main`
+### ▶️ Execução manual
 
 ```bash
 ./mvnw compile exec:java -Dexec.mainClass="com.tinnova.avaliacao.question1.Question1"
@@ -71,8 +73,6 @@ A classe `Question2` contém:
 
 ### 🔍 Testes
 
-A classe `Question2Test` compara o array ordenado com o resultado esperado:
-
 ```bash
 ./mvnw test
 ```
@@ -83,7 +83,7 @@ Resultado esperado:
 [INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 ```
 
-### ▶️ Executar com `main`
+### ▶️ Execução manual
 
 ```bash
 ./mvnw compile exec:java -Dexec.mainClass="com.tinnova.avaliacao.question2.Question2"
@@ -94,6 +94,40 @@ Saída esperada:
 ```
 Original array: [5, 3, 2, 4, 7, 1, 0, 6]
 Ordered array:  [0, 1, 2, 3, 4, 5, 6, 7]
+```
+
+---
+
+## ✅ Questão 3 – Cálculo de Fatorial
+
+> Implementar o cálculo de fatorial de um número inteiro.
+
+A classe `Question3` fornece:
+- O método `factorial(long number)` que retorna o fatorial de um número
+- Um método `main()` que recebe um número por argumento de linha de comando (opcional)
+
+### 🔍 Testes
+
+```bash
+./mvnw test
+```
+
+Resultados esperados:
+- `factorial(4)` → `24`
+- `factorial(5)` → `120`
+- `factorial(6)` → `720`
+
+### ▶️ Execução manual
+
+```bash
+./mvnw compile exec:java -Dexec.mainClass="com.tinnova.avaliacao.question3.Question3" -Dexec.args="5"
+```
+
+Saída esperada:
+
+```
+Fatorial of : 5!
+Result: 120
 ```
 
 ---

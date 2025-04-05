@@ -279,19 +279,53 @@ Resposta: `204 No Content`
 ---
 
 
-#### `GET /veiculos/stats/nao-vendidos`
 
-Retorna a quantidade de veículos disponíveis para venda (`vendido = false`).
+{
+"quantidade": 42
+}
+```
+
+
+
+#### `GET /veiculos/stats`
+
+Retorna estatísticas da frota, incluindo:
+
+- Quantidade de veículos não vendidos
+- Distribuição por década de fabricação
+- Distribuição por fabricante
+- Veículos registrados na última semana
 
 ```http
-GET /veiculos/stats/nao-vendidos
+GET /veiculos/stats
 ```
 
 ##### 🔄 Exemplo de Resposta
 
 ```json
 {
-  "quantidade": 42
+  "quantidadeNaoVendido": 1,
+  "quantidadeDecadas": {
+    "Década 2020": 1,
+    "Década 1980": 1
+  },
+  "quantidadeFabricantes": {
+    "VOLKSWAGEN": 1,
+    "CHEVROLET": 1
+  },
+  "quantidadeNaSemana": [
+        {
+        "id": 3,
+        "veiculo": "Uno",
+        "marca": "FIAT",
+        "ano": 2009,
+        "descricao": "bom",
+        "vendido": false,
+        "created": "2025-04-05T19:41:40.939559818",
+        "updated": null,
+        "cor": "branco"
+      }
+  ]
 }
 ```
 

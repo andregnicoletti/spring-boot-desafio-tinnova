@@ -12,109 +12,21 @@
         hr { margin: 2rem 0; }
         .actions button { margin-right: 8px; }
     </style>
-    <script>
-        async function loadVeiculos() {
-          const marca = document.getElementById("marca").value;
-          const ano = document.getElementById("ano").value;
-          const cor = document.getElementById("cor").value;
 
-          let url = "/veiculos";
-          const params = [];
-          if (marca) params.push("marca=" + encodeURIComponent(marca));
-          if (ano) params.push("ano=" + encodeURIComponent(ano));
-          if (cor) params.push("cor=" + encodeURIComponent(cor));
-          if (params.length) url += "?" + params.join("&");
-
-          const res = await fetch(url);
-          const data = await res.json();
-
-          const list = document.getElementById("lista");
-          list.innerHTML = data.map(v => `
-            <li>
-              <strong>${v.veiculo}</strong> - ${v.marca} (${v.ano}) - Cor: ${v.cor} - ${v.vendido ? 'Vendido' : 'Disponível'}
-              <div class="actions">
-                <button onclick="carregarParaEdicao(${v.id})">Editar</button>
-                <button onclick="excluirVeiculo(${v.id})">Excluir</button>
-              </div>
-            </li>`).join('');
-        }
-
-        async function cadastrarVeiculo(event) {
-          event.preventDefault();
-
-          const form = document.getElementById("formCadastro");
-          const id = form.id.value;
-          const veiculo = form.veiculo.value;
-          const marca = form.marca.value;
-          const ano = parseInt(form.ano.value);
-          const descricao = form.descricao.value;
-          const vendido = form.vendido.checked;
-          const cor = form.cor.value;
-
-          const payload = { veiculo, marca, ano, descricao, vendido, cor };
-
-          const url = id ? `/veiculos/${id}` : "/veiculos";
-          const method = id ? "PUT" : "POST";
-
-          const res = await fetch(url, {
-            method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-
-          if (res.ok) {
-            alert(id ? "Veículo atualizado." : "Veículo cadastrado.");
-            form.reset();
-            form.id.value = "";
-            loadVeiculos(); carregarQuantidadeNaoVendidos();
-          } else {
-            alert("Erro ao salvar veículo");
-          }
-        }
-
-        function carregarParaEdicao(id) {
-          fetch(`/veiculos/${id}`)
-            .then(res => res.json())
-            .then(v => {
-              const form = document.getElementById("formCadastro");
-              form.id.value = v.id;
-              form.veiculo.value = v.veiculo;
-              form.marca.value = v.marca;
-              form.ano.value = v.ano;
-              form.descricao.value = v.descricao;
-              form.cor.value = v.cor;
-              form.vendido.checked = v.vendido;
-              window.scrollTo(0, document.body.scrollHeight);
-            });
-        }
-
-        async function excluirVeiculo(id) {
-          if (!confirm("Deseja excluir este veículo?")) return;
-          const res = await fetch(`/veiculos/${id}`, { method: "DELETE" });
-          if (res.ok) {
-            alert("Veículo excluído.");
-            loadVeiculos(); carregarQuantidadeNaoVendidos();
-          } else {
-            alert("Erro ao excluir veículo.");
-          }
-        }
-
-    async function carregarQuantidadeNaoVendidos() {
-        try {
-            const res = await fetch("/veiculos/stats/nao-vendidos");
-            const data = await res.json();
-            document.getElementById("infoNaoVendidos").textContent =
-                `Veículos disponíveis para venda: ${data.quantidade}`;
-        } catch (e) {
-            document.getElementById("infoNaoVendidos").textContent =
-                "Erro ao carregar quantidade de veículos não vendidos.";
-        }
-    }
-
-    </script>
 </head>
 <body onload="loadVeiculos(); carregarQuantidadeNaoVendidos(); carregarQuantidadeNaoVendidos();">
 <h1>🚗 Lista de Veículos</h1>
+
+<div style="margin-top: 2rem; padding: 1rem; background: #f4f4f4; border-radius: 8px;">
+    <h2>📊 Informações da Frota</h2>
+    <ul id="dashboardStats">
+        <li><strong>Veículos disponíveis:</strong> <span id="statNaoVendidos">-</span></li>
+        <li><strong>Distribuição por década:</strong><ul id="statDecadas"></ul></li>
+        <li><strong>Distribuição por fabricante:</strong><ul id="statFabricantes"></ul></li>
+        <li><strong>Registrados na última semana:</strong><ul id="statSemana"></ul></li>
+    </ul>
+</div>
+
 <p id="infoNaoVendidos">Carregando veículos não vendidos...</p>
 
 <div>
@@ -166,5 +78,121 @@
     </label>
     <button type="submit">Salvar</button>
 </form>
+
+
+
+
+<script>
+    async function loadVeiculos() {
+        const marca = document.getElementById("marca").value;
+        const ano = document.getElementById("ano").value;
+        const cor = document.getElementById("cor").value;
+
+        let url = "/veiculos";
+        const params = [];
+        if (marca) params.push("marca=" + encodeURIComponent(marca));
+        if (ano) params.push("ano=" + encodeURIComponent(ano));
+        if (cor) params.push("cor=" + encodeURIComponent(cor));
+        if (params.length) url += "?" + params.join("&");
+
+        const res = await fetch(url);
+        const data = await res.json();
+
+        const list = document.getElementById("lista");
+        list.innerHTML = data.map(v => `
+            <li>
+                <strong>${v.veiculo}</strong> - ${v.marca} (${v.ano}) - Cor: ${v.cor} - ${v.vendido ? 'Vendido' : 'Disponível'}
+                <div class="actions">
+                    <button onclick="carregarParaEdicao(${v.id})">Editar</button>
+                    <button onclick="excluirVeiculo(${v.id})">Excluir</button>
+                </div>
+            </li>`).join('');
+    }
+
+    async function cadastrarVeiculo(event) {
+        event.preventDefault();
+
+        const form = document.getElementById("formCadastro");
+        const id = form.id.value;
+        const veiculo = form.veiculo.value;
+        const marca = form.marca.value;
+        const ano = parseInt(form.ano.value);
+        const descricao = form.descricao.value;
+        const vendido = form.vendido.checked;
+        const cor = form.cor.value;
+
+        const payload = { veiculo, marca, ano, descricao, vendido, cor };
+        const url = id ? `/veiculos/${id}` : "/veiculos";
+        const method = id ? "PUT" : "POST";
+
+        const res = await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            alert(id ? "Veículo atualizado." : "Veículo cadastrado.");
+            form.reset();
+            form.id.value = "";
+            loadVeiculos();
+            carregarQuantidadeNaoVendidos();
+        } else {
+            alert("Erro ao salvar veículo");
+        }
+    }
+
+    function carregarParaEdicao(id) {
+        fetch(`/veiculos/${id}`)
+            .then(res => res.json())
+            .then(v => {
+                const form = document.getElementById("formCadastro");
+                form.id.value = v.id;
+                form.veiculo.value = v.veiculo;
+                form.marca.value = v.marca;
+                form.ano.value = v.ano;
+                form.descricao.value = v.descricao;
+                form.cor.value = v.cor;
+                form.vendido.checked = v.vendido;
+                window.scrollTo(0, document.body.scrollHeight);
+            });
+    }
+
+    async function excluirVeiculo(id) {
+        if (!confirm("Deseja excluir este veículo?")) return;
+        const res = await fetch(`/veiculos/${id}`, { method: "DELETE" });
+        if (res.ok) {
+            alert("Veículo excluído.");
+            loadVeiculos();
+            carregarQuantidadeNaoVendidos();
+        } else {
+            alert("Erro ao excluir veículo.");
+        }
+    }
+
+    async function carregarQuantidadeNaoVendidos() {
+        try {
+            const res = await fetch("/veiculos/stats");
+            const data = await res.json();
+
+            document.getElementById("statNaoVendidos").textContent = data.quantidadeNaoVendido;
+
+            const decadasList = document.getElementById("statDecadas");
+            decadasList.innerHTML = Object.entries(data.quantidadeDecadas)
+                .map(([decada, count]) => `<li>${decada} → ${count} veículos</li>`).join('');
+
+            const fabricantesList = document.getElementById("statFabricantes");
+            fabricantesList.innerHTML = Object.entries(data.quantidadeFabricantes)
+                .map(([marca, count]) => `<li>${marca} → ${count} veículos</li>`).join('');
+
+            const semanaList = document.getElementById("statSemana");
+            semanaList.innerHTML = data.quantidadeNaSemana
+                .map(v => `<li>${v.veiculo} (${v.marca}, ${v.ano}) - ${v.cor}</li>`).join('');
+        } catch (e) {
+            document.getElementById("dashboardStats").innerHTML = "<li>Erro ao carregar estatísticas.</li>";
+        }
+    }
+</script>
+
 </body>
 </html>

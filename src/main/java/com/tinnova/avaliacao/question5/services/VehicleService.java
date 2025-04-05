@@ -1,6 +1,6 @@
 package com.tinnova.avaliacao.question5.services;
 
-import com.tinnova.avaliacao.question5.dto.CountVehicleDto;
+import com.tinnova.avaliacao.question5.dto.VehicleStatsDto;
 import com.tinnova.avaliacao.question5.dto.VehicleDto;
 import com.tinnova.avaliacao.question5.enums.VehicleBrand;
 import com.tinnova.avaliacao.question5.enums.VehicleColor;
@@ -9,9 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -68,6 +70,7 @@ public class VehicleService {
         VehicleModel model = VehicleModel.fromDto(request);
         Integer newId = id.getAndIncrement();
         model.setId(newId);
+        model.setCreated(LocalDateTime.now());
         vehiclesModelQueue.add(model);
         return this.getVehicleById(newId);
     }
@@ -118,10 +121,42 @@ public class VehicleService {
         return VehicleDto.fromModel(model);
     }
 
-    public CountVehicleDto countNotSellerVehicles() {
-        Long count = vehiclesModelQueue.stream()
-                .filter(item -> item.getSold() == Boolean.FALSE)
+    public VehicleStatsDto countNotSellerVehicles() {
+        VehicleStatsDto stats = new VehicleStatsDto();
+
+        // Quantidade de veículos não vendidos
+        Long countNotSoldVehicle = vehiclesModelQueue.stream()
+                .filter(item -> Boolean.FALSE.equals(item.getSold()))
                 .count();
-        return new CountVehicleDto(count);
+        stats.setQuantidadeNaoVendido(countNotSoldVehicle);
+
+        // Distribuição por década
+        Map<String, Integer> quantidadePorDecada = vehiclesModelQueue.stream()
+                .collect(Collectors.groupingBy(
+                        v -> {
+                            int decada = (v.getYear() / 10) * 10;
+                            return "Década " + decada;
+                        },
+                        Collectors.reducing(0, e -> 1, Integer::sum)
+                ));
+        stats.setQuantidadeDecadas(quantidadePorDecada);
+
+        // Distribuição por fabricante
+        Map<String, Integer> quantidadePorFabricante = vehiclesModelQueue.stream()
+                .collect(Collectors.groupingBy(
+                        v -> String.valueOf(v.getBrand()),
+                        Collectors.reducing(0, e -> 1, Integer::sum)
+                ));
+        stats.setQuantidadeFabricantes(quantidadePorFabricante);
+
+        // Veículos registrados na última semana
+        LocalDateTime umaSemanaAtras = LocalDateTime.now().minusDays(7);
+        List<VehicleDto> registradosUltimaSemana = vehiclesModelQueue.stream()
+                .filter(v -> v.getCreated().isAfter(umaSemanaAtras))
+                .map(VehicleDto::fromModel) // Assumindo que existe um construtor de cópia ou conversão
+                .collect(Collectors.toList());
+        stats.setQuantidadeNaSemana(registradosUltimaSemana);
+
+        return stats;
     }
 }

@@ -1,11 +1,9 @@
 package com.tinnova.avaliacao.question5.controller;
 
-import com.tinnova.avaliacao.question5.dto.CountVehicleDto;
+import com.tinnova.avaliacao.question5.dto.VehicleStatsDto;
 import com.tinnova.avaliacao.question5.dto.VehicleDto;
 import com.tinnova.avaliacao.question5.services.VehicleService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,9 +59,9 @@ public class VehicleController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/stats/nao-vendidos")
-    public ResponseEntity<CountVehicleDto> statsNotSold(){
-        CountVehicleDto response = vehicleService.countNotSellerVehicles();
+    @GetMapping("/stats")
+    public ResponseEntity<VehicleStatsDto> statsNotSold(){
+        VehicleStatsDto response = vehicleService.countNotSellerVehicles();
         return ResponseEntity.ok(response);
     }
 

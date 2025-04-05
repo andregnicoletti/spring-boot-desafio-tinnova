@@ -4,9 +4,11 @@ import com.tinnova.avaliacao.question5.dto.VehicleDto;
 import com.tinnova.avaliacao.question5.services.VehicleService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -30,4 +32,10 @@ public class VehicleController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping
+    public ResponseEntity<VehicleDto> createVehicle(@RequestBody VehicleDto request) {
+        VehicleDto created = vehicleService.createVehicle(request);
+        URI location = URI.create("/veiculos/" + created.getId());
+        return ResponseEntity.created(location).body(created);
+    }
 }

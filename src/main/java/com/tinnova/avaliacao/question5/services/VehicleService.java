@@ -12,16 +12,18 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class VehicleService {
 
+    private final AtomicInteger id = new AtomicInteger(1);
     private final Queue<VehicleModel> vehiclesModelQueue = new ConcurrentLinkedQueue<>();
 
     public VehicleService() {
         // Inicializa com alguns veículos de exemplo
         vehiclesModelQueue.add(new VehicleModel(
-                1,
+                id.getAndIncrement(),
                 "Fusca",
                 VehicleBrand.VOLKSWAGEN,
                 1985,
@@ -33,7 +35,7 @@ public class VehicleService {
         ));
 
         vehiclesModelQueue.add(new VehicleModel(
-                2,
+                id.getAndIncrement(),
                 "Onix",
                 VehicleBrand.CHEVROLET,
                 2020,
@@ -62,4 +64,11 @@ public class VehicleService {
                 .orElseThrow(() -> new NoSuchElementException("Veículo com ID " + id + " não encontrado"));
     }
 
+    public VehicleDto createVehicle(VehicleDto request) {
+        VehicleModel model = VehicleModel.fromDto(request);
+        Integer newId = id.getAndIncrement();
+        model.setId(newId);
+        vehiclesModelQueue.add(model);
+        return this.getVehicleById(newId);
+    }
 }

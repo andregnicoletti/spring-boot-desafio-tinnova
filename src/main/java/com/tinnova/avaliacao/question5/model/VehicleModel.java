@@ -1,14 +1,15 @@
 package com.tinnova.avaliacao.question5.model;
 
 
+import com.tinnova.avaliacao.question5.dto.VehicleDto;
 import com.tinnova.avaliacao.question5.enums.VehicleBrand;
 import com.tinnova.avaliacao.question5.enums.VehicleColor;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class VehicleModel {
 
@@ -21,5 +22,19 @@ public class VehicleModel {
     private LocalDateTime created;
     private LocalDateTime updated;
     private VehicleColor color;
+
+    public static VehicleModel fromDto(VehicleDto dto) {
+        return new VehicleModel(
+                dto.getId(),
+                dto.getVeiculo(),
+                VehicleBrand.valueOf(dto.getMarca().toUpperCase()),
+                dto.getAno(),
+                dto.getDescricao(),
+                dto.getVendido(),
+                dto.getCreated(),
+                dto.getUpdated(),
+                VehicleColor.fromLabel(dto.getCor())
+        );
+    }
 
 }

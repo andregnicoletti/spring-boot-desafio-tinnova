@@ -19,7 +19,22 @@ src/
                     ├── question2/
                     │   └── Question2.java
                     └── question3/
-                        └── Question3.java
+                    │   └── Question3.java
+                    └── question4/
+                    │   └── Question4.java   
+                    └── question5/
+                        ├── controller/
+                        │   └── VehicleController.java
+                        ├── services/
+                        │   └── VehicleService.java
+                        ├── model/
+                        │   └── VehicleModel.java
+                        ├── dto/
+                        │   ├── VehicleDto.java
+                        │   └── VehiclePatchDto.java
+                        └── enums/
+                            ├── VehicleBrand.java
+                            └── VehicleColor.java
 └── test/
     └── java/
         └── com/
@@ -30,7 +45,11 @@ src/
                     ├── question2/
                     │   └── Question2Test.java
                     └── question3/
-                        └── Question3Test.java
+                    │   └── Question3Test.java
+                    └── question4/
+                    │   └── Question4.java 
+                    └── question5/
+                        └── Question5.java                         
 ```
 
 ---
@@ -162,6 +181,144 @@ Sum of multiples of 3 or 5: 23
 ```
 
 ---
+## ✅ Questão 5 – API REST de Veículos
+
+> Criar um serviço REST que simula o gerenciamento de veículos, com funcionalidades de CRUD e filtros.
+
+### 🚗 Funcionalidades da API
+
+#### `GET /veiculos`
+
+Lista todos os veículos ou filtra por:
+- `marca`
+- `ano`
+- `cor`
+
+```http
+GET /veiculos?marca=FIAT&ano=2020&cor=vermelho
+```
+
+#### `GET /veiculos/{id}`
+
+Busca um veículo pelo ID.
+
+```http
+GET /veiculos/1
+```
+
+---
+
+#### `POST /veiculos`
+
+Cria um novo veículo.
+
+```http
+POST /veiculos
+Content-Type: application/json
+
+{
+  "veiculo": "Civic",
+  "marca": "HONDA",
+  "ano": 2021,
+  "descricao": "Sedan completo",
+  "vendido": false,
+  "cor": "preto"
+}
+```
+
+Retorna:
+- `201 Created`
+- Header `Location: /veiculos/{id}`
+- Corpo com o veículo criado
+
+---
+
+#### `PUT /veiculos/{id}`
+
+Atualiza um veículo **completo**.
+
+```http
+PUT /veiculos/1
+Content-Type: application/json
+
+{
+  "veiculo": "Civic Sport",
+  "marca": "HONDA",
+  "ano": 2022,
+  "descricao": "Atualizado",
+  "vendido": true,
+  "cor": "branco"
+}
+```
+
+---
+
+#### `PATCH /veiculos/{id}`
+
+Atualiza um ou mais campos do veículo (parcial).
+
+```http
+PATCH /veiculos/1
+Content-Type: application/json
+
+{
+  "vendido": true
+}
+```
+
+---
+
+#### `DELETE /veiculos/{id}`
+
+Remove um veículo.
+
+```http
+DELETE /veiculos/1
+```
+
+Resposta: `204 No Content`
+
+---
+
+
+
+{
+"quantidade": 42
+}
+```
+
+
+
+#### `GET /veiculos/stats`
+
+Retorna estatísticas da frota, incluindo:
+
+- Quantidade de veículos não vendidos
+- Distribuição por década de fabricação
+- Distribuição por fabricante
+- Veículos registrados na última semana
+
+```http
+GET /veiculos/stats
+```
+
+##### 🔄 Exemplo de Resposta
+
+```json
+{
+  "quantidadeNaoVendido": 1,
+  "quantidadeDecadas": {
+    "Década 2020": 1,
+    "Década 1980": 1
+  },
+  "quantidadeFabricantes": {
+    "VOLKSWAGEN": 1,
+    "CHEVROLET": 1
+  },
+  "quantidadeNaSemana": []
+}
+```
+
 
 ## 💡 Tecnologias utilizadas
 
@@ -169,6 +326,28 @@ Sum of multiples of 3 or 5: 23
 - Spring Boot 3.4.4
 - Maven
 - JUnit 5
+- Simulação de banco com `ConcurrentLinkedQueue`
+---
+
+## 📈 Cobertura de Testes com JaCoCo
+
+Este projeto utiliza o plugin **JaCoCo** para gerar relatórios de cobertura de testes.
+
+### ▶️ Como gerar o relatório
+
+1. Execute os testes com o comando:
+
+```bash
+./mvnw clean verify
+```
+
+2. Após a execução, o relatório estará disponível em:
+
+```
+target/site/jacoco/index.html
+```
+
+Você pode abri-lo diretamente no navegador para visualizar a porcentagem de cobertura de classes, métodos e linhas de código da API.
 
 ---
 
@@ -176,3 +355,4 @@ Sum of multiples of 3 or 5: 23
 
 - Email: andregnicoletti@gmail.com
 - LinkedIn: https://www.linkedin.com/in/andre-nicoletti
+---

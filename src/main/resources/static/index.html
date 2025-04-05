@@ -1,20 +1,156 @@
-<!-- src/main/resources/static/index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>Veículos</title>
+    <style>
+        body { font-family: sans-serif; padding: 1rem; max-width: 800px; margin: auto; }
+        li { margin-bottom: 0.5rem; }
+        label { display: block; margin-top: 0.5rem; }
+        input, textarea, select { width: 100%; padding: 4px; margin-top: 4px; }
+        button { margin-top: 1rem; padding: 6px 12px; }
+        hr { margin: 2rem 0; }
+        .actions button { margin-right: 8px; }
+    </style>
     <script>
         async function loadVeiculos() {
-          const res = await fetch("/veiculos"); // seu endpoint
+          const marca = document.getElementById("marca").value;
+          const ano = document.getElementById("ano").value;
+          const cor = document.getElementById("cor").value;
+
+          let url = "/veiculos";
+          const params = [];
+          if (marca) params.push("marca=" + encodeURIComponent(marca));
+          if (ano) params.push("ano=" + encodeURIComponent(ano));
+          if (cor) params.push("cor=" + encodeURIComponent(cor));
+          if (params.length) url += "?" + params.join("&");
+
+          const res = await fetch(url);
           const data = await res.json();
+
           const list = document.getElementById("lista");
-          list.innerHTML = data.map(v => `<li>${v.veiculo} - ${v.marca}</li>`).join('');
+          list.innerHTML = data.map(v => `
+            <li>
+              <strong>${v.veiculo}</strong> - ${v.marca} (${v.ano}) - Cor: ${v.cor} - ${v.vendido ? 'Vendido' : 'Disponível'}
+              <div class="actions">
+                <button onclick="carregarParaEdicao(${v.id})">Editar</button>
+                <button onclick="excluirVeiculo(${v.id})">Excluir</button>
+              </div>
+            </li>`).join('');
+        }
+
+        async function cadastrarVeiculo(event) {
+          event.preventDefault();
+
+          const form = document.getElementById("formCadastro");
+          const id = form.id.value;
+          const veiculo = form.veiculo.value;
+          const marca = form.marca.value;
+          const ano = parseInt(form.ano.value);
+          const descricao = form.descricao.value;
+          const vendido = form.vendido.checked;
+          const cor = form.cor.value;
+
+          const payload = { veiculo, marca, ano, descricao, vendido, cor };
+
+          const url = id ? `/veiculos/${id}` : "/veiculos";
+          const method = id ? "PUT" : "POST";
+
+          const res = await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (res.ok) {
+            alert(id ? "Veículo atualizado." : "Veículo cadastrado.");
+            form.reset();
+            form.id.value = "";
+            loadVeiculos();
+          } else {
+            alert("Erro ao salvar veículo");
+          }
+        }
+
+        function carregarParaEdicao(id) {
+          fetch(`/veiculos/${id}`)
+            .then(res => res.json())
+            .then(v => {
+              const form = document.getElementById("formCadastro");
+              form.id.value = v.id;
+              form.veiculo.value = v.veiculo;
+              form.marca.value = v.marca;
+              form.ano.value = v.ano;
+              form.descricao.value = v.descricao;
+              form.cor.value = v.cor;
+              form.vendido.checked = v.vendido;
+              window.scrollTo(0, document.body.scrollHeight);
+            });
+        }
+
+        async function excluirVeiculo(id) {
+          if (!confirm("Deseja excluir este veículo?")) return;
+          const res = await fetch(`/veiculos/${id}`, { method: "DELETE" });
+          if (res.ok) {
+            alert("Veículo excluído.");
+            loadVeiculos();
+          } else {
+            alert("Erro ao excluir veículo.");
+          }
         }
     </script>
 </head>
 <body onload="loadVeiculos()">
-<h1>Lista de Veículos</h1>
+<h1>🚗 Lista de Veículos</h1>
+
+<div>
+    <label>
+        Marca:
+        <input type="text" id="marca" placeholder="FIAT, HONDA, FORD..." />
+    </label>
+    <label>
+        Ano:
+        <input type="number" id="ano" />
+    </label>
+    <label>
+        Cor:
+        <input type="text" id="cor" placeholder="preto, branco..." />
+    </label>
+    <button onclick="loadVeiculos()">Filtrar</button>
+</div>
+
 <ul id="lista"></ul>
+
+<hr/>
+
+<h2>📥 Cadastrar / Editar Veículo</h2>
+<form id="formCadastro" onsubmit="cadastrarVeiculo(event)">
+    <input type="hidden" name="id" />
+    <label>
+        Veículo:
+        <input type="text" name="veiculo" required />
+    </label>
+    <label>
+        Marca:
+        <input type="text" name="marca" required placeholder="HONDA, FIAT, FORD, etc." />
+    </label>
+    <label>
+        Ano:
+        <input type="number" name="ano" required />
+    </label>
+    <label>
+        Descrição:
+        <textarea name="descricao" rows="3"></textarea>
+    </label>
+    <label>
+        Cor:
+        <input type="text" name="cor" required />
+    </label>
+    <label>
+        Vendido?
+        <input type="checkbox" name="vendido" />
+    </label>
+    <button type="submit">Salvar</button>
+</form>
 </body>
 </html>

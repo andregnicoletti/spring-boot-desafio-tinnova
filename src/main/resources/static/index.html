@@ -1,0 +1,20 @@
+<!-- src/main/resources/static/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Veículos</title>
+    <script>
+        async function loadVeiculos() {
+          const res = await fetch("/veiculos"); // seu endpoint
+          const data = await res.json();
+          const list = document.getElementById("lista");
+          list.innerHTML = data.map(v => `<li>${v.veiculo} - ${v.marca}</li>`).join('');
+        }
+    </script>
+</head>
+<body onload="loadVeiculos()">
+<h1>Lista de Veículos</h1>
+<ul id="lista"></ul>
+</body>
+</html>

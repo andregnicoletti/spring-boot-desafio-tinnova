@@ -19,7 +19,22 @@ src/
                     ├── question2/
                     │   └── Question2.java
                     └── question3/
-                        └── Question3.java
+                    │   └── Question3.java
+                    └── question4/
+                    │   └── Question4.java   
+                    └── question5/
+                        ├── controller/
+                        │   └── VehicleController.java
+                        ├── services/
+                        │   └── VehicleService.java
+                        ├── model/
+                        │   └── VehicleModel.java
+                        ├── dto/
+                        │   ├── VehicleDto.java
+                        │   └── VehiclePatchDto.java
+                        └── enums/
+                            ├── VehicleBrand.java
+                            └── VehicleColor.java
 └── test/
     └── java/
         └── com/
@@ -30,7 +45,9 @@ src/
                     ├── question2/
                     │   └── Question2Test.java
                     └── question3/
-                        └── Question3Test.java
+                    │   └── Question3Test.java
+                    └── question4/
+                        └── Question4.java 
 ```
 
 ---

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/veiculos")
@@ -43,6 +44,13 @@ public class VehicleController {
     public ResponseEntity<VehicleDto> updateVehicle(@PathVariable Integer id,
                                                     @RequestBody VehicleDto request) {
         VehicleDto updated = vehicleService.updateVehicle(id, request);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<VehicleDto> patchVehicle(@PathVariable Integer id,
+                                                   @RequestBody Map<String, Object> updates) {
+        VehicleDto updated = vehicleService.patchVehicle(id, updates);
         return ResponseEntity.ok(updated);
     }
 }

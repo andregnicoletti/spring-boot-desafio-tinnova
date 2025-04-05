@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -97,4 +94,27 @@ public class VehicleService {
                 .findFirst()
                 .ifPresent(vehiclesModelQueue::remove);
     }
+
+    public VehicleDto patchVehicle(Integer id, Map<String, Object> patch) {
+        VehicleModel model = vehiclesModelQueue.stream()
+                .filter(v -> Objects.equals(v.getId(), id))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("Veículo com ID " + id + " não encontrado"));
+
+        patch.forEach((key, value) -> {
+            switch (key) {
+                case "veiculo" -> model.setVehicle((String) value);
+                case "descricao" -> model.setDescription((String) value);
+                case "ano" -> model.setYear((Integer) value);
+                case "vendido" -> model.setSold((Boolean) value);
+                case "marca" -> model.setBrand(VehicleBrand.valueOf(((String) value).toUpperCase()));
+                case "cor" -> model.setColor(VehicleColor.fromLabel(((String) value).toUpperCase()));
+                // campos como "id", "created", "updated" ignorados
+            }
+        });
+
+        model.setUpdated(LocalDateTime.now());
+        return VehicleDto.fromModel(model);
+    }
+
 }

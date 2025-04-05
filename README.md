@@ -329,12 +329,6 @@ GET /veiculos/stats
 - Simulação de banco com `ConcurrentLinkedQueue`
 ---
 
-## 📬 Contato
-
-- Email: andregnicoletti@gmail.com
-- LinkedIn: https://www.linkedin.com/in/andre-nicoletti
----
-
 ## 📈 Cobertura de Testes com JaCoCo
 
 Este projeto utiliza o plugin **JaCoCo** para gerar relatórios de cobertura de testes.
@@ -354,3 +348,11 @@ target/site/jacoco/index.html
 ```
 
 Você pode abri-lo diretamente no navegador para visualizar a porcentagem de cobertura de classes, métodos e linhas de código da API.
+
+---
+
+## 📬 Contato
+
+- Email: andregnicoletti@gmail.com
+- LinkedIn: https://www.linkedin.com/in/andre-nicoletti
+---

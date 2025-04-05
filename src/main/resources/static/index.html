@@ -66,7 +66,7 @@
             alert(id ? "Veículo atualizado." : "Veículo cadastrado.");
             form.reset();
             form.id.value = "";
-            loadVeiculos();
+            loadVeiculos(); carregarQuantidadeNaoVendidos();
           } else {
             alert("Erro ao salvar veículo");
           }
@@ -93,15 +93,29 @@
           const res = await fetch(`/veiculos/${id}`, { method: "DELETE" });
           if (res.ok) {
             alert("Veículo excluído.");
-            loadVeiculos();
+            loadVeiculos(); carregarQuantidadeNaoVendidos();
           } else {
             alert("Erro ao excluir veículo.");
           }
         }
+
+    async function carregarQuantidadeNaoVendidos() {
+        try {
+            const res = await fetch("/veiculos/stats/nao-vendidos");
+            const data = await res.json();
+            document.getElementById("infoNaoVendidos").textContent =
+                `Veículos disponíveis para venda: ${data.quantidade}`;
+        } catch (e) {
+            document.getElementById("infoNaoVendidos").textContent =
+                "Erro ao carregar quantidade de veículos não vendidos.";
+        }
+    }
+
     </script>
 </head>
-<body onload="loadVeiculos()">
+<body onload="loadVeiculos(); carregarQuantidadeNaoVendidos(); carregarQuantidadeNaoVendidos();">
 <h1>🚗 Lista de Veículos</h1>
+<p id="infoNaoVendidos">Carregando veículos não vendidos...</p>
 
 <div>
     <label>

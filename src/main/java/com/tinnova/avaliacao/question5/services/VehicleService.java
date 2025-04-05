@@ -1,5 +1,6 @@
 package com.tinnova.avaliacao.question5.services;
 
+import com.tinnova.avaliacao.question5.dto.CountVehicleDto;
 import com.tinnova.avaliacao.question5.dto.VehicleDto;
 import com.tinnova.avaliacao.question5.enums.VehicleBrand;
 import com.tinnova.avaliacao.question5.enums.VehicleColor;
@@ -117,4 +118,10 @@ public class VehicleService {
         return VehicleDto.fromModel(model);
     }
 
+    public CountVehicleDto countNotSellerVehicles() {
+        Long count = vehiclesModelQueue.stream()
+                .filter(item -> item.getSold() == Boolean.FALSE)
+                .count();
+        return new CountVehicleDto(count);
+    }
 }

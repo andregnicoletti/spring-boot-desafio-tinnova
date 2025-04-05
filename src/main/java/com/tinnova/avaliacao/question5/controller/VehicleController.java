@@ -1,5 +1,6 @@
 package com.tinnova.avaliacao.question5.controller;
 
+import com.tinnova.avaliacao.question5.dto.CountVehicleDto;
 import com.tinnova.avaliacao.question5.dto.VehicleDto;
 import com.tinnova.avaliacao.question5.services.VehicleService;
 import jakarta.websocket.server.PathParam;
@@ -58,6 +59,12 @@ public class VehicleController {
     public ResponseEntity<Void> deleteVehicle(@PathVariable Integer id) {
         vehicleService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/stats/nao-vendidos")
+    public ResponseEntity<CountVehicleDto> statsNotSold(){
+        CountVehicleDto response = vehicleService.countNotSellerVehicles();
+        return ResponseEntity.ok(response);
     }
 
 }

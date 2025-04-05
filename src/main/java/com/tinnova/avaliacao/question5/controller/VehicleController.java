@@ -4,9 +4,7 @@ import com.tinnova.avaliacao.question5.dto.VehicleDto;
 import com.tinnova.avaliacao.question5.services.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +16,10 @@ public class VehicleController {
     private VehicleService vehicleService;
 
     @GetMapping
-    public ResponseEntity<List<VehicleDto>> getVehicles() {
-        List<VehicleDto> response = vehicleService.listAllVehicles();
+    public ResponseEntity<List<VehicleDto>> getVehicles(@RequestParam(name = "marca", required = false) String brand,
+                                                        @RequestParam(name = "ano", required = false) Integer year,
+                                                        @RequestParam(name = "cor", required = false) String color) {
+        List<VehicleDto> response = vehicleService.findVehicles(brand, year, color);
         return ResponseEntity.ok(response);
     }
 

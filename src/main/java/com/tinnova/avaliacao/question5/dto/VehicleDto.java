@@ -19,16 +19,18 @@ public class VehicleDto {
     private Boolean vendido;
     private LocalDateTime created;
     private LocalDateTime updated;
+    private String cor;
 
     public static VehicleDto fromModel(VehicleModel model) {
         return new VehicleDto(
                 model.getVehicle(),
-                model.getBrand(),
+                model.getBrand().toString(),
                 model.getYear(),
                 model.getDescription(),
                 model.getSold(),
                 model.getCreated(),
-                model.getUpdated()
+                model.getUpdated(),
+                model.getColor().getLabel()
         );
     }
 }

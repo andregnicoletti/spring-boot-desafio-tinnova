@@ -22,6 +22,10 @@ public class VehicleService {
     private final AtomicInteger id = new AtomicInteger(1);
     private final Queue<VehicleModel> vehiclesModelQueue = new ConcurrentLinkedQueue<>();
 
+    public VehicleService(Queue<VehicleModel> vehiclesModelQueue) {
+        this.vehiclesModelQueue.addAll(vehiclesModelQueue);
+    }
+
     public VehicleService() {
         // Inicializa com alguns veículos de exemplo
         vehiclesModelQueue.add(new VehicleModel(

@@ -38,4 +38,11 @@ public class VehicleController {
         URI location = URI.create("/veiculos/" + created.getId());
         return ResponseEntity.created(location).body(created);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<VehicleDto> updateVehicle(@PathVariable Integer id,
+                                                    @RequestBody VehicleDto request) {
+        VehicleDto updated = vehicleService.updateVehicle(id, request);
+        return ResponseEntity.ok(updated);
+    }
 }

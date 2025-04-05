@@ -4,6 +4,7 @@ import com.tinnova.avaliacao.question5.dto.VehicleDto;
 import com.tinnova.avaliacao.question5.enums.VehicleBrand;
 import com.tinnova.avaliacao.question5.enums.VehicleColor;
 import com.tinnova.avaliacao.question5.model.VehicleModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Slf4j
 @Service
 public class VehicleService {
 
@@ -70,5 +72,29 @@ public class VehicleService {
         model.setId(newId);
         vehiclesModelQueue.add(model);
         return this.getVehicleById(newId);
+    }
+
+    public VehicleDto updateVehicle(Integer id, VehicleDto request) {
+        VehicleModel model = vehiclesModelQueue.stream()
+                .filter(v -> Objects.equals(v.getId(), id))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("Veículo com ID " + id + " não encontrado"));
+
+        model.setVehicle(request.getVeiculo());
+        model.setBrand(VehicleBrand.valueOf(request.getMarca().toUpperCase()));
+        model.setYear(request.getAno());
+        model.setDescription(request.getDescricao());
+        model.setSold(request.getVendido());
+        model.setColor(VehicleColor.fromLabel(request.getCor().toUpperCase()));
+        model.setUpdated(LocalDateTime.now());
+
+        return VehicleDto.fromModel(model);
+    }
+
+    private void removeModelBy(Integer id) {
+        vehiclesModelQueue.stream()
+                .filter(vehicle -> Objects.equals(vehicle.getId(), id))
+                .findFirst()
+                .ifPresent(vehiclesModelQueue::remove);
     }
 }

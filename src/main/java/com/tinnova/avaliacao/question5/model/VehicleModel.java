@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class VehicleModel {
 
+    private Integer id;
     private String vehicle;
     private VehicleBrand brand;
     private Integer year;

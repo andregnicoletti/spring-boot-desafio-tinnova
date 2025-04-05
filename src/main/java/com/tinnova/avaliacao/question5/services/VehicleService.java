@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -20,6 +21,7 @@ public class VehicleService {
     public VehicleService() {
         // Inicializa com alguns veículos de exemplo
         vehiclesModelQueue.add(new VehicleModel(
+                1,
                 "Fusca",
                 VehicleBrand.VOLKSWAGEN,
                 1985,
@@ -31,6 +33,7 @@ public class VehicleService {
         ));
 
         vehiclesModelQueue.add(new VehicleModel(
+                2,
                 "Onix",
                 VehicleBrand.CHEVROLET,
                 2020,
@@ -49,6 +52,14 @@ public class VehicleService {
                 .filter(model -> color == null || Objects.equals(model.getColor(), color))
                 .map(VehicleDto::fromModel)
                 .toList();
+    }
+
+    public VehicleDto getVehicleById(Integer id) {
+        return vehiclesModelQueue.stream()
+                .filter(vehicle -> Objects.equals(vehicle.getId(), id))
+                .findFirst()
+                .map(VehicleDto::fromModel)
+                .orElseThrow(() -> new NoSuchElementException("Veículo com ID " + id + " não encontrado"));
     }
 
 }

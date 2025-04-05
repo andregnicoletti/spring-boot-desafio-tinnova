@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class VehicleDto {
 
+    private Integer id;
     private String veiculo;
     private String marca;
     private Integer ano;
@@ -23,6 +24,7 @@ public class VehicleDto {
 
     public static VehicleDto fromModel(VehicleModel model) {
         return new VehicleDto(
+                model.getId(),
                 model.getVehicle(),
                 model.getBrand().toString(),
                 model.getYear(),

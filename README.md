@@ -162,6 +162,104 @@ Sum of multiples of 3 or 5: 23
 ```
 
 ---
+## ✅ Questão 5 – API REST de Veículos
+
+> Criar um serviço REST que simula o gerenciamento de veículos, com funcionalidades de CRUD e filtros.
+
+### 🚗 Funcionalidades da API
+
+#### `GET /veiculos`
+
+Lista todos os veículos ou filtra por:
+- `marca` 
+- `ano`
+- `cor` 
+
+```http
+GET /veiculos?marca=FIAT&ano=2020&cor=vermelho
+```
+
+#### `GET /veiculos/{id}`
+
+Busca um veículo pelo ID.
+
+```http
+GET /veiculos/1
+```
+
+---
+
+#### `POST /veiculos`
+
+Cria um novo veículo.
+
+```http
+POST /veiculos
+Content-Type: application/json
+
+{
+  "veiculo": "Civic",
+  "marca": "HONDA",
+  "ano": 2021,
+  "descricao": "Sedan completo",
+  "vendido": false,
+  "cor": "preto"
+}
+```
+
+Retorna:
+- `201 Created`
+- Header `Location: /veiculos/{id}`
+- Corpo com o veículo criado
+
+---
+
+#### `PUT /veiculos/{id}`
+
+Atualiza um veículo **completo**.
+
+```http
+PUT /veiculos/1
+Content-Type: application/json
+
+{
+  "veiculo": "Civic Sport",
+  "marca": "HONDA",
+  "ano": 2022,
+  "descricao": "Atualizado",
+  "vendido": true,
+  "cor": "branco"
+}
+```
+
+---
+
+#### `PATCH /veiculos/{id}`
+
+Atualiza um ou mais campos do veículo (parcial).
+
+```http
+PATCH /veiculos/1
+Content-Type: application/json
+
+{
+  "vendido": true
+}
+```
+
+---
+
+#### `DELETE /veiculos/{id}`
+
+Remove um veículo.
+
+```http
+DELETE /veiculos/1
+```
+
+Resposta: `204 No Content`
+
+---
 
 ## 💡 Tecnologias utilizadas
 
@@ -169,7 +267,7 @@ Sum of multiples of 3 or 5: 23
 - Spring Boot 3.4.4
 - Maven
 - JUnit 5
-
+- Simulação de banco com `ConcurrentLinkedQueue`
 ---
 
 ## 📬 Contato

@@ -53,4 +53,11 @@ public class VehicleController {
         VehicleDto updated = vehicleService.patchVehicle(id, updates);
         return ResponseEntity.ok(updated);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVehicle(@PathVariable Integer id) {
+        vehicleService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

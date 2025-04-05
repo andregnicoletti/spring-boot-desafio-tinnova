@@ -88,7 +88,7 @@ public class VehicleService {
         return VehicleDto.fromModel(model);
     }
 
-    private void removeModelBy(Integer id) {
+    public void deleteById(Integer id) {
         vehiclesModelQueue.stream()
                 .filter(vehicle -> Objects.equals(vehicle.getId(), id))
                 .findFirst()

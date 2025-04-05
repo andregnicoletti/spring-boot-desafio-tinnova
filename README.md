@@ -47,7 +47,9 @@ src/
                     └── question3/
                     │   └── Question3Test.java
                     └── question4/
-                        └── Question4.java 
+                    │   └── Question4.java 
+                    └── question5/
+                        └── Question5.java                         
 ```
 
 ---
@@ -313,19 +315,7 @@ GET /veiculos/stats
     "VOLKSWAGEN": 1,
     "CHEVROLET": 1
   },
-  "quantidadeNaSemana": [
-        {
-        "id": 3,
-        "veiculo": "Uno",
-        "marca": "FIAT",
-        "ano": 2009,
-        "descricao": "bom",
-        "vendido": false,
-        "created": "2025-04-05T19:41:40.939559818",
-        "updated": null,
-        "cor": "branco"
-      }
-  ]
+  "quantidadeNaSemana": []
 }
 ```
 
@@ -343,3 +333,24 @@ GET /veiculos/stats
 
 - Email: andregnicoletti@gmail.com
 - LinkedIn: https://www.linkedin.com/in/andre-nicoletti
+---
+
+## 📈 Cobertura de Testes com JaCoCo
+
+Este projeto utiliza o plugin **JaCoCo** para gerar relatórios de cobertura de testes.
+
+### ▶️ Como gerar o relatório
+
+1. Execute os testes com o comando:
+
+```bash
+./mvnw clean verify
+```
+
+2. Após a execução, o relatório estará disponível em:
+
+```
+target/site/jacoco/index.html
+```
+
+Você pode abri-lo diretamente no navegador para visualizar a porcentagem de cobertura de classes, métodos e linhas de código da API.

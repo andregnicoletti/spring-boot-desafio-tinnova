@@ -188,9 +188,9 @@ Sum of multiples of 3 or 5: 23
 #### `GET /veiculos`
 
 Lista todos os veículos ou filtra por:
-- `marca` 
+- `marca`
 - `ano`
-- `cor` 
+- `cor`
 
 ```http
 GET /veiculos?marca=FIAT&ano=2020&cor=vermelho
@@ -277,6 +277,24 @@ DELETE /veiculos/1
 Resposta: `204 No Content`
 
 ---
+
+
+#### `GET /veiculos/stats/nao-vendidos`
+
+Retorna a quantidade de veículos disponíveis para venda (`vendido = false`).
+
+```http
+GET /veiculos/stats/nao-vendidos
+```
+
+##### 🔄 Exemplo de Resposta
+
+```json
+{
+  "quantidade": 42
+}
+```
+
 
 ## 💡 Tecnologias utilizadas
 

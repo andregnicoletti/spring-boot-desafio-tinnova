@@ -183,7 +183,36 @@ Sum of multiples of 3 or 5: 23
 ---
 ## ✅ Questão 5 – API REST de Veículos
 
-> Criar um serviço REST que simula o gerenciamento de veículos, com funcionalidades de CRUD e filtros.
+### ▶️ Como executar o projeto (API de Veículos)
+
+1. Gere o arquivo `.jar` com o seguinte comando:
+
+```bash
+./mvnw clean package
+```
+
+2. Após a build, execute o projeto com:
+
+```bash
+java -jar target/avaliacao-0.0.1-SNAPSHOT.jar
+```
+
+3. A aplicação será iniciada por padrão na porta **8080**.
+
+---
+
+### ⚙️ Como alterar a porta padrão
+
+Crie ou edite o arquivo `src/main/resources/application.yaml` com o seguinte conteúdo:
+
+```yaml
+server:
+  port: 8080
+```
+
+Você pode alterar `8080` para qualquer outra porta disponível.
+
+---
 
 ### 🚗 Funcionalidades da API
 
@@ -306,16 +335,29 @@ GET /veiculos/stats
 
 ```json
 {
-  "quantidadeNaoVendido": 1,
+  "quantidadeNaoVendido": 2,
   "quantidadeDecadas": {
-    "Década 2020": 1,
+    "Década 2020": 2,
     "Década 1980": 1
   },
   "quantidadeFabricantes": {
     "VOLKSWAGEN": 1,
-    "CHEVROLET": 1
+    "CHEVROLET": 1,
+    "HONDA": 1
   },
-  "quantidadeNaSemana": []
+  "quantidadeNaSemana": [
+    {
+      "id": 3,
+      "veiculo": "Civic",
+      "marca": "HONDA",
+      "ano": 2021,
+      "descricao": "Sedan completo, ótimo estado",
+      "vendido": false,
+      "created": "2025-04-05T21:48:40.750176743",
+      "updated": "2024-01-01T10:00:00",
+      "cor": "preto"
+    }
+  ]
 }
 ```
 

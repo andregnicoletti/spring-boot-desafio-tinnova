@@ -157,7 +157,7 @@ public class VehicleService {
         LocalDateTime umaSemanaAtras = LocalDateTime.now().minusDays(7);
         List<VehicleDto> registradosUltimaSemana = vehiclesModelQueue.stream()
                 .filter(v -> v.getCreated().isAfter(umaSemanaAtras))
-                .map(VehicleDto::fromModel) // Assumindo que existe um construtor de cópia ou conversão
+                .map(VehicleDto::fromModel) 
                 .collect(Collectors.toList());
         stats.setQuantidadeNaSemana(registradosUltimaSemana);
 
